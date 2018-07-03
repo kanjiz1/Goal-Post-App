@@ -28,7 +28,6 @@ class CreateGoalVC: UIViewController, UITextViewDelegate {
     @IBAction func longTermButtonWasPressed(_ sender: Any) {
         goalType = .longTerm
         shortTermButton.setDeselectedColor()
-        goalType = .shortTerm
         longTermButton.setSeletedColor()
     }
     @IBAction func shortTermButtonWasPressed(_ sender: Any) {
@@ -41,7 +40,6 @@ class CreateGoalVC: UIViewController, UITextViewDelegate {
             guard let finishGoalVC = storyboard?.instantiateViewController(withIdentifier: FINISHED_GOAL_VC) as? FinishedGoalVC else {return}
             
             finishGoalVC.initData(description: goalTextView.text, type: goalType)
-            
             presentingViewController?.presentSecondaryDetail(finishGoalVC)
         }
     }
