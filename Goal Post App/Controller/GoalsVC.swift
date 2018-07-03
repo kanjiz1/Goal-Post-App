@@ -9,17 +9,27 @@
 import UIKit
 import CoreData
 
+struct Backup{
+    var description: String!
+    var goalType: String!
+    var completionValue: Int32!
+    var goalProgress: Int32!
+}
+
 class GoalsVC: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var undoView: UIView!
     
     var goals: [Goal] = []
+    var backup: Backup!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.isHidden = true
+        undoView.isHidden = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -42,6 +52,13 @@ class GoalsVC: UIViewController {
         guard let createGoalVC = storyboard?.instantiateViewController(withIdentifier: CREATE_GOAL_VC) as? CreateGoalVC else {return}
         presentDetail(createGoalVC)
     }
+    
+    @IBAction func undoButtonWasPressed(_ sender: Any) {
+        undoDelete()
+        undoView.isHidden = true
+        tableView.reloadData()
+    }
+    
 }
 
 extension GoalsVC: UITableViewDelegate, UITableViewDataSource{
@@ -75,23 +92,72 @@ extension GoalsVC: UITableViewDelegate, UITableViewDataSource{
             self.fetchCoreDataObjects()
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
-        deleteAction.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
         
-        return [deleteAction]
+        let addAction = UITableViewRowAction(style: .normal, title: "ADD ONE") { (rowAction, indexPath) in
+            self.setProgress(atIndexPath: indexPath)
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+        deleteAction.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+        addAction.backgroundColor = #colorLiteral(red: 0.9385011792, green: 0.7164435983, blue: 0.3331357837, alpha: 1)
+        
+        return [deleteAction, addAction]
     }
 }
 
 extension GoalsVC {
     
+    func setProgress(atIndexPath indextPath: IndexPath){
+        guard let manageContext = appDelegate?.persistentContainer.viewContext else {return}
+        
+        let chosenGoal = goals[indextPath.row]
+        if chosenGoal.goalProgress < chosenGoal.goalCompletionValue{
+            chosenGoal.goalProgress = chosenGoal.goalProgress + 1
+        } else{
+            return
+        }
+        do {
+            try manageContext.save()
+            print("Successfully set progress")
+        } catch{
+            debugPrint("Could not set progress: \(error.localizedDescription)")
+        }
+    }
+    
+    //Removing goal from Core Data
     func removeGoal(atIndexPath indexPath: IndexPath){
         guard let manageContext = appDelegate?.persistentContainer.viewContext else {return}
+
+        backup = Backup(description: goals[indexPath.row].goalDescription, goalType: goals[indexPath.row].goalType, completionValue: goals[indexPath.row].goalCompletionValue, goalProgress: goals[indexPath.row].goalProgress)
+        
         manageContext.delete(goals[indexPath.row])
         
         do{
             try manageContext.save()
             print("Successfully removed goal")
+            undoView.isHidden = false
         } catch{
             debugPrint("Could not remove: \(error.localizedDescription)")
+        }
+    }
+    
+    //undo function
+    func undoDelete(){
+        guard let manageContext = appDelegate?.persistentContainer.viewContext else {return}
+        let goal = Goal(context: manageContext)
+        
+        goal.goalDescription = backup.description
+        goal.goalType = backup.goalType
+        goal.goalCompletionValue = backup.completionValue
+        goal.goalProgress = (backup.goalProgress)
+        
+        self.goals.append(goal)
+        
+        do {
+            try manageContext.save()
+            print("Successfully Undone")
+        }
+        catch let error as NSError {
+            debugPrint("Something went Wrong: \(error.localizedDescription)")
         }
     }
     
