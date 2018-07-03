@@ -6,7 +6,9 @@
 //  Copyright © 2018 Oforkanji Odekpe. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+let appDelegate = UIApplication.shared.delegate as? AppDelegate
 
 let GOAL_CELL = "goalCell"
 let GOAL_VC = "goalsVC"

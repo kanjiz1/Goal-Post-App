@@ -24,6 +24,11 @@ class GoalsVC: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        fetchCoreDataObjects()
+        tableView.reloadData()
+    }
+    
+    func fetchCoreDataObjects(){
         self.fetch { (complete) in
             if goals.count >= 1{
                 tableView.isHidden = false
@@ -31,7 +36,6 @@ class GoalsVC: UIViewController {
                 tableView.isHidden = true
             }
         }
-        tableView.reloadData()
     }
 
     @IBAction func addGoalButtonWasPressed(_ sender: Any) {
@@ -56,9 +60,42 @@ extension GoalsVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return goals.count
     }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        return .none
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "DELETE") { (rowAction, indexPath) in
+            self.removeGoal(atIndexPath: indexPath)
+            self.fetchCoreDataObjects()
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+        deleteAction.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+        
+        return [deleteAction]
+    }
 }
 
 extension GoalsVC {
+    
+    func removeGoal(atIndexPath indexPath: IndexPath){
+        guard let manageContext = appDelegate?.persistentContainer.viewContext else {return}
+        manageContext.delete(goals[indexPath.row])
+        
+        do{
+            try manageContext.save()
+            print("Successfully removed goal")
+        } catch{
+            debugPrint("Could not remove: \(error.localizedDescription)")
+        }
+    }
+    
+    //Fetching Data from Core Data
     func fetch(completion: (_ complete: Bool) -> ()){
         guard let managedContext = appDelegate?.persistentContainer.viewContext else {return}
         let fetchRequest = NSFetchRequest<Goal>(entityName: "Goal")
