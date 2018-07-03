@@ -11,3 +11,4 @@ import Foundation
 let GOAL_CELL = "goalCell"
 let GOAL_VC = "goalsVC"
 let CREATE_GOAL_VC = "createGoalVC"
+let FINISHED_GOAL_VC = "finishedGoalVC"
