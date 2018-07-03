@@ -17,6 +17,7 @@
 		CD05160520EB8D1D00C5994D /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD05160420EB8D1D00C5994D /* Constants.swift */; };
 		CD05160720EB971200C5994D /* EnumsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD05160620EB971200C5994D /* EnumsType.swift */; };
 		CD05160920EB9C6700C5994D /* CreateGoalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD05160820EB9C6700C5994D /* CreateGoalVC.swift */; };
+		CD05160B20EBDA8300C5994D /* UIViewControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD05160A20EBDA8300C5994D /* UIViewControllerExt.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		CD05160420EB8D1D00C5994D /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		CD05160620EB971200C5994D /* EnumsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumsType.swift; sourceTree = "<group>"; };
 		CD05160820EB9C6700C5994D /* CreateGoalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGoalVC.swift; sourceTree = "<group>"; };
+		CD05160A20EBDA8300C5994D /* UIViewControllerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExt.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 		CD05160120EB7A8E00C5994D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				CD05160A20EBDA8300C5994D /* UIViewControllerExt.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -184,6 +187,7 @@
 			files = (
 				CD05160720EB971200C5994D /* EnumsType.swift in Sources */,
 				CD05160520EB8D1D00C5994D /* Constants.swift in Sources */,
+				CD05160B20EBDA8300C5994D /* UIViewControllerExt.swift in Sources */,
 				CD05160320EB8CE100C5994D /* GoalCell.swift in Sources */,
 				CD0515EC20EB7A4400C5994D /* GoalsVC.swift in Sources */,
 				CD05160920EB9C6700C5994D /* CreateGoalVC.swift in Sources */,

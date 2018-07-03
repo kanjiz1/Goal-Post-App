@@ -8,4 +8,6 @@
 
 import Foundation
 
-let goalCell = "goalCell"
+let GOAL_CELL = "goalCell"
+let GOAL_VC = "goalsVC"
+let CREATE_GOAL_VC = "createGoalVC"
